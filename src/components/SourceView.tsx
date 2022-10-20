@@ -16,8 +16,8 @@ export const SourceView = () => {
     return (
         <>
             <Editor
-                height="95%"
-                width={"95%"}
+                height="100%"
+                width={"100%"}
                 defaultLanguage="json"
                 defaultValue="// some comment"
                 theme={"vs-dark"}

@@ -16,8 +16,8 @@ export const EditorWrapper = () => {
     return (
         <>
             <Editor
-                height="95%"
-                width={"95%"}
+                height="100%"
+                width={"100%"}
                 defaultLanguage="javascript"
                 defaultValue="// some comment"
                 theme={"vs-dark"}
