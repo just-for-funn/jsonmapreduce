@@ -1,8 +1,8 @@
-import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
 import {useRef} from "react";
+import Editor from "@monaco-editor/react";
 import editorService from "./EditorService";
 
-export const EditorWrapper = () => {
+export const SourceView = () => {
     const editorRef = useRef<any>(null);
 
     function handleEditorDidMount(editor: any, monaco: any) {
@@ -10,7 +10,7 @@ export const EditorWrapper = () => {
     }
 
     function handleEditorChange(value: any, event:any) {
-        editorService.setBody(value);
+        editorService.setSource(value);
     }
 
     return (
@@ -18,7 +18,7 @@ export const EditorWrapper = () => {
             <Editor
                 height="95%"
                 width={"95%"}
-                defaultLanguage="javascript"
+                defaultLanguage="json"
                 defaultValue="// some comment"
                 theme={"vs-dark"}
                 onMount={handleEditorDidMount}

@@ -1,8 +1,8 @@
-import Editor, { DiffEditor, useMonaco, loader } from "@monaco-editor/react";
-import {useRef} from "react";
+import {useEffect, useRef} from "react";
+import Editor from "@monaco-editor/react";
 import editorService from "./EditorService";
 
-export const EditorWrapper = () => {
+export const ResultView = () => {
     const editorRef = useRef<any>(null);
 
     function handleEditorDidMount(editor: any, monaco: any) {
@@ -10,15 +10,24 @@ export const EditorWrapper = () => {
     }
 
     function handleEditorChange(value: any, event:any) {
-        editorService.setBody(value);
+        console.log("here is the current model value:", value);
     }
+
+    useEffect(()=> {
+       let subscription = editorService.result$.subscribe(arg =>{
+           editorRef.current.setValue(arg);
+       });
+       return ()=>{
+         subscription.unsubscribe();
+       };
+    });
 
     return (
         <>
             <Editor
                 height="95%"
                 width={"95%"}
-                defaultLanguage="javascript"
+                defaultLanguage="json"
                 defaultValue="// some comment"
                 theme={"vs-dark"}
                 onMount={handleEditorDidMount}
