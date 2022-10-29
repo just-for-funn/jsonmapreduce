@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: jsonmapreduce
+  name: jsonmapreduce
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jsonmapreduce
+  template:
+    metadata:
+      labels:
+        app: jsonmapreduce
+    spec:
+      containers:
+        - image: davutozcan/jsonmapreduce:2
+          name: jsonmapreduce
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: jsonmapreduce
+spec:
+  selector:
+    app: jsonmapreduce
+  type: ClusterIP
+  ports:
+    - name: httpport
+      port: 80
+      targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jsonmapreduce
+  annotations:
+    external-dns.alpha.kubernetes.io/hostname: jsonmapreduce.davutozcan.com
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+    - host: jsonmapreduce.davutozcan.com
+      http:
+        paths:
+          - backend:
+              service:
+                name: jsonmapreduce
+                port:
+                  number: 80
+            path: /
+            pathType: Prefix
+  tls:
+    - hosts:
+        - jsonmapreduce.davutozcan.com
+      secretName: jsonmapreduce
